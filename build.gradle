@@ -1,4 +1,9 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+ext {
+    targetCompatibility = "1.8"
+    sourceCompatibility = "1.8"
+    ndkVersion = '23.1.7779620'
+    buildToolsVersion = '25.0.0'
+}// Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
     repositories {

@@ -11,17 +11,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.biometric.BiometricPrompt;
-
 import com.beemdevelopment.aegis.R;
 import com.beemdevelopment.aegis.ThemeMap;
 import com.beemdevelopment.aegis.crypto.KeyStoreHandle;
@@ -36,17 +29,11 @@ import com.beemdevelopment.aegis.ui.tasks.PasswordSlotDecryptTask;
 import com.beemdevelopment.aegis.vault.VaultFile;
 import com.beemdevelopment.aegis.vault.VaultFileCredentials;
 import com.beemdevelopment.aegis.vault.VaultRepositoryException;
-import com.beemdevelopment.aegis.vault.slots.BiometricSlot;
-import com.beemdevelopment.aegis.vault.slots.PasswordSlot;
-import com.beemdevelopment.aegis.vault.slots.Slot;
-import com.beemdevelopment.aegis.vault.slots.SlotException;
-import com.beemdevelopment.aegis.vault.slots.SlotIntegrityException;
-import com.beemdevelopment.aegis.vault.slots.SlotList;
-
-import java.util.List;
+import com.beemdevelopment.aegis.vault.slots.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import java.util.List;
 
 public class AuthActivity extends AegisActivity {
     private EditText _textPassword;
@@ -83,6 +70,7 @@ public class AuthActivity extends AegisActivity {
         }
 
         Intent intent = getIntent();
+
         if (savedInstanceState == null) {
             _inhibitBioPrompt = intent.getBooleanExtra("inhibitBioPrompt", false);
         } else {
@@ -134,7 +122,7 @@ public class AuthActivity extends AegisActivity {
         }
 
         decryptButton.setOnClickListener(v -> {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
             char[] password = EditTextHelper.getEditTextChars(_textPassword);
@@ -217,7 +205,7 @@ public class AuthActivity extends AegisActivity {
         PopupWindow popup = new PopupWindow(popupLayout, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popup.setFocusable(false);
         popup.setOutsideTouchable(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             popup.setElevation(5.0f);
         }
         _textPassword.post(() -> {
@@ -232,7 +220,7 @@ public class AuthActivity extends AegisActivity {
     }
 
     public BiometricPrompt showBiometricPrompt() {
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(_textPassword.getWindowToken(), 0);
 
         Cipher cipher;
@@ -282,7 +270,7 @@ public class AuthActivity extends AegisActivity {
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> selectPassword())
                 .create());
 
-        _failedUnlockAttempts ++;
+        _failedUnlockAttempts++;
 
         if (_failedUnlockAttempts >= 3) {
             _textPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);

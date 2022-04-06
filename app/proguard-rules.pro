@@ -23,3 +23,16 @@
 
 -keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
 -keep class !org.bouncycastle.jce.provider.X509LDAPCertStoreSpi { *; }
+
+# SmsungFingerprint
+-keep class com.samsung.android.sdk.** { *; }
+
+-dontwarn javax.lang.model.element.Modifier
+-dontwarn javax.naming.NamingEnumeration
+-dontwarn javax.naming.NamingException
+-dontwarn javax.naming.directory.Attribute
+-dontwarn javax.naming.directory.Attributes
+-dontwarn javax.naming.directory.DirContext
+-dontwarn javax.naming.directory.InitialDirContext
+-dontwarn javax.naming.directory.SearchControls
+-dontwarn javax.naming.directory.SearchResult

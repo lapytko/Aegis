@@ -9,15 +9,8 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.annotation.NonNull;
-import androidx.biometric.BiometricPrompt;
-
 import com.beemdevelopment.aegis.R;
 import com.beemdevelopment.aegis.helpers.BiometricSlotInitializer;
 import com.beemdevelopment.aegis.helpers.BiometricsHelper;
@@ -38,10 +31,7 @@ import com.nulabinc.zxcvbn.Zxcvbn;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 
-import static com.beemdevelopment.aegis.ui.slides.SecurityPickerSlide.CRYPT_TYPE_BIOMETRIC;
-import static com.beemdevelopment.aegis.ui.slides.SecurityPickerSlide.CRYPT_TYPE_INVALID;
-import static com.beemdevelopment.aegis.ui.slides.SecurityPickerSlide.CRYPT_TYPE_NONE;
-import static com.beemdevelopment.aegis.ui.slides.SecurityPickerSlide.CRYPT_TYPE_PASS;
+import static com.beemdevelopment.aegis.ui.slides.SecurityPickerSlide.*;
 
 public class SecuritySetupSlide extends SlideFragment {
     private EditText _textPassword;
@@ -114,8 +104,8 @@ public class SecuritySetupSlide extends SlideFragment {
     }
 
     private void showBiometricPrompt() {
-        BiometricSlotInitializer initializer = new BiometricSlotInitializer(this, new BiometricsListener());
-        BiometricPrompt.PromptInfo info = new BiometricPrompt.PromptInfo.Builder()
+        BiometricSlotInitializer initializer = new BiometricSlotInitializer(this.getActivity(), new BiometricsListener());
+        androidx.biometric.BiometricPrompt.PromptInfo info = new androidx.biometric.BiometricPrompt.PromptInfo.Builder()
                 .setTitle(getString(R.string.set_up_biometric))
                 .setNegativeButtonText(getString(android.R.string.cancel))
                 .build();

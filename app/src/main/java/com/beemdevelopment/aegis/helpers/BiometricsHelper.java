@@ -1,7 +1,6 @@
 package com.beemdevelopment.aegis.helpers;
 
 import android.content.Context;
-
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 

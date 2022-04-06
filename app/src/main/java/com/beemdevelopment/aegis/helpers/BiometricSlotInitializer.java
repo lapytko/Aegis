@@ -4,14 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.biometric.BiometricPrompt;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-
 import com.beemdevelopment.aegis.crypto.KeyStoreHandle;
 import com.beemdevelopment.aegis.crypto.KeyStoreHandleException;
 import com.beemdevelopment.aegis.vault.slots.BiometricSlot;
 import com.beemdevelopment.aegis.vault.slots.Slot;
-import com.beemdevelopment.aegis.vault.slots.SlotException;
-
-import java.util.Objects;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -25,6 +21,10 @@ public class BiometricSlotInitializer extends BiometricPrompt.AuthenticationCall
     private BiometricSlot _slot;
     private Listener _listener;
     private BiometricPrompt _prompt;
+    private Cipher _cipher ;
+    private  SecretKey _key;
+    private KeyStoreHandle _keyStore;
+
 
     public BiometricSlotInitializer(Fragment fragment, Listener listener) {
         _listener = listener;
@@ -47,28 +47,23 @@ public class BiometricSlotInitializer extends BiometricPrompt.AuthenticationCall
             throw new IllegalStateException("Biometric authentication already in progress");
         }
 
-        KeyStoreHandle keyStore;
         try {
-            keyStore = new KeyStoreHandle();
+            _prompt.authenticate(info);
+            _keyStore = new KeyStoreHandle();
         } catch (KeyStoreHandleException e) {
             fail(e);
             return;
         }
 
-        // generate a new Android KeyStore key
-        // and assign it the UUID of the new slot as an alias
-        Cipher cipher;
-        BiometricSlot slot = new BiometricSlot();
+        _slot = new BiometricSlot();
+
         try {
-            SecretKey key = keyStore.generateKey(slot.getUUID().toString());
-            cipher = Slot.createEncryptCipher(key);
-        } catch (KeyStoreHandleException | SlotException e) {
+            _prompt.authenticate(info, new BiometricPrompt.CryptoObject(_cipher));
+        } catch (Exception e) {
             fail(e);
             return;
         }
 
-        _slot = slot;
-        _prompt.authenticate(info, new BiometricPrompt.CryptoObject(cipher));
     }
 
     /**
@@ -79,7 +74,6 @@ public class BiometricSlotInitializer extends BiometricPrompt.AuthenticationCall
         if (_slot == null) {
             throw new IllegalStateException("Biometric authentication not in progress");
         }
-
         reset();
         _prompt.cancelAuthentication();
     }
@@ -121,7 +115,14 @@ public class BiometricSlotInitializer extends BiometricPrompt.AuthenticationCall
     @Override
     public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
         super.onAuthenticationSucceeded(result);
-        _listener.onInitializeSlot(_slot, Objects.requireNonNull(result.getCryptoObject()).getCipher());
+        try {
+            _key = _keyStore.generateKey(_slot.getUUID().toString());
+            _cipher = Slot.createEncryptCipher(_key);
+            _listener.onInitializeSlot(_slot, _cipher);
+        } catch (Exception e){
+            fail(e);
+            e.setStackTrace(e.getStackTrace());
+        }
     }
 
     @Override
