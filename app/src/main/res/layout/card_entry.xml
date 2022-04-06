@@ -24,21 +24,21 @@
             android:paddingStart="16dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ivTextDrawable"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentStart="true" />
+                    android:id="@+id/ivTextDrawable"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ivSelected"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/item_selected"
-                android:visibility="gone"
-                app:civ_circle_background_color="@color/colorPrimarySelected" />
+                    android:id="@+id/ivSelected"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/item_selected"
+                    android:visibility="gone"
+                    app:civ_circle_background_color="@color/colorPrimarySelected"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -74,48 +74,48 @@
                 android:layout_alignStart="@+id/profile_code">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/profile_issuer"
-                    android:text="@string/issuer"
-                    android:textStyle="bold"
-                    android:textColor="?attr/primaryText"
-                    android:includeFontPadding="false"
-                    android:textSize="16sp"
-                    android:ellipsize="end"
-                    android:maxLines="1"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/profile_issuer"
+                        android:text="@string/issuer"
+                        android:textStyle="bold"
+                        android:textColor="?attr/primaryText"
+                        android:includeFontPadding="false"
+                        android:textSize="16sp"
+                        android:ellipsize="end"
+                        android:maxLines="1"/>
 
                 <TextView
-                    android:id="@+id/profile_account_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/profile_issuer"
-                    android:layout_marginStart="2dp"
-                    android:ellipsize="end"
-                    android:includeFontPadding="false"
-                    android:maxLines="1"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="16sp"
-                    tools:text=" - AccountName" />
+                        android:id="@+id/profile_account_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@id/profile_issuer"
+                        android:layout_marginStart="2dp"
+                        android:ellipsize="end"
+                        android:includeFontPadding="false"
+                        android:maxLines="1"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="16sp"
+                        tools:text=" - AccountName"/>
 
             </RelativeLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:fontFamily="sans-serif-light"
-                tools:text="012 345"
-                android:id="@+id/profile_code"
-                android:layoutDirection="ltr"
-                android:layout_below="@id/description"
-                android:includeFontPadding="false"
-                android:textSize="34sp"
-                android:textColor="?attr/codePrimaryText"
-                android:layout_marginStart="6dp"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="0dp"
-                android:textStyle="normal|bold"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:fontFamily="sans-serif-light"
+                    tools:text="012 345"
+                    android:id="@+id/profile_code"
+                    android:layoutDirection="ltr"
+                    android:layout_below="@id/description"
+                    android:includeFontPadding="false"
+                    android:textSize="34sp"
+                    android:textColor="?attr/codePrimaryText"
+                    android:layout_marginStart="4dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="0dp"
+                    android:textStyle="normal|bold"/>
 
         </RelativeLayout>
 
@@ -139,11 +139,32 @@
                 app:tint="?attr/iconColorPrimary"
                 android:background="?android:attr/selectableItemBackground" />
 
+            <RelativeLayout
+                    android:id="@+id/qr_auth_wrapper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:visibility="visible"
+                    android:paddingStart="16dp">
+
+                <ImageView
+                        android:id="@+id/qr_auth"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginEnd="4dp"
+                        android:visibility="@id/qr_auth_wrapper"
+                        android:scaleType="fitXY"
+                        app:tint="?attr/iconColorPrimary"
+                        android:src="@drawable/ic_qr_code_full"/>
+            </RelativeLayout>
+
             <ImageView
                 android:id="@+id/drag_handle"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
+                android:layout_toEndOf="@id/qr_auth_wrapper"
                 android:layout_marginEnd="-12dp"
                 android:visibility="invisible"
                 android:scaleType="fitXY"

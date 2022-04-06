@@ -3,21 +3,15 @@ package com.beemdevelopment.aegis.vault;
 import com.beemdevelopment.aegis.encoding.Base64;
 import com.beemdevelopment.aegis.encoding.EncodingException;
 import com.beemdevelopment.aegis.icons.IconType;
-import com.beemdevelopment.aegis.otp.GoogleAuthInfo;
-import com.beemdevelopment.aegis.otp.OtpInfo;
-import com.beemdevelopment.aegis.otp.OtpInfoException;
-import com.beemdevelopment.aegis.otp.TotpInfo;
+import com.beemdevelopment.aegis.otp.*;
 import com.beemdevelopment.aegis.util.JsonUtils;
 import com.beemdevelopment.aegis.util.UUIDMap;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.annotation.Nonnull;
 
 public class VaultEntry extends UUIDMap.Value {
     private String _name = "";
@@ -28,6 +22,7 @@ public class VaultEntry extends UUIDMap.Value {
     private IconType _iconType = IconType.INVALID;
     private int _usageCount;
     private String _note = "";
+    private Boolean _qr_auth;
 
     private VaultEntry(UUID uuid, OtpInfo info) {
         super(uuid);
@@ -69,6 +64,7 @@ public class VaultEntry extends UUIDMap.Value {
             obj.put("icon", _icon == null ? JSONObject.NULL : Base64.encode(_icon));
             obj.put("icon_mime", _icon == null ? null : _iconType.toMimeType());
             obj.put("info", _info.toJson());
+            obj.put("qr_auth", _qr_auth);
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
@@ -92,6 +88,7 @@ public class VaultEntry extends UUIDMap.Value {
             entry.setIssuer(obj.getString("issuer"));
             entry.setGroup(obj.optString("group", null));
             entry.setNote(obj.optString("note", ""));
+            entry.setQRAuth();
 
             Object icon = obj.get("icon");
             if (icon != JSONObject.NULL) {
@@ -142,6 +139,10 @@ public class VaultEntry extends UUIDMap.Value {
 
     public String getNote() { return _note; }
 
+    public Boolean isQrAuth() {
+        return _qr_auth;
+    }
+
     public void setName(String name) {
         _name = name;
     }
@@ -170,6 +171,8 @@ public class VaultEntry extends UUIDMap.Value {
     public void setUsageCount(int usageCount) { _usageCount = usageCount; }
 
     public void setNote(String note) { _note = note; }
+
+    public void setQRAuth() { _qr_auth = _info instanceof YandexInfo ? Boolean.TRUE : Boolean.FALSE; }
 
     @Override
     public boolean equals(Object o) {

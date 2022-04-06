@@ -42,6 +42,7 @@ public class EntryHolder extends RecyclerView.ViewHolder {
     private ImageView _buttonRefresh;
     private RelativeLayout _description;
     private ImageView _dragHandle;
+    private ImageView _qr_auth;
   
     private final ImageView _selected;
     private final Handler _selectedHandler;
@@ -74,6 +75,7 @@ public class EntryHolder extends RecyclerView.ViewHolder {
         _buttonRefresh = view.findViewById(R.id.buttonRefresh);
         _selected = view.findViewById(R.id.ivSelected);
         _dragHandle = view.findViewById(R.id.drag_handle);
+        _qr_auth = view.findViewById(R.id.qr_auth);
 
         _selectedHandler = new Handler();
         _animationHandler = new Handler();
@@ -110,7 +112,6 @@ public class EntryHolder extends RecyclerView.ViewHolder {
             throw new IllegalArgumentException("Code group size cannot be zero or negative");
 
         _codeGroupSize = codeGroupSize;
-
         _selected.clearAnimation();
         _selected.setVisibility(View.GONE);
         _selectedHandler.removeCallbacksAndMessages(null);
@@ -118,6 +119,9 @@ public class EntryHolder extends RecyclerView.ViewHolder {
 
         // only show the progress bar if there is no uniform period and the entry type is TotpInfo
         setShowProgress(showProgress);
+
+        // only show the button if this entry is of type Yandex
+        _qr_auth.setVisibility(entry.getInfo() instanceof YandexInfo  ? View.VISIBLE : View.GONE);
 
         // only show the button if this entry is of type HotpInfo
         _buttonRefresh.setVisibility(entry.getInfo() instanceof HotpInfo ? View.VISIBLE : View.GONE);
