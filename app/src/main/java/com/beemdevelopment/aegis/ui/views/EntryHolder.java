@@ -18,11 +18,7 @@ import com.beemdevelopment.aegis.helpers.IconViewHelper;
 import com.beemdevelopment.aegis.helpers.TextDrawableHelper;
 import com.beemdevelopment.aegis.helpers.ThemeHelper;
 import com.beemdevelopment.aegis.helpers.UiRefresher;
-import com.beemdevelopment.aegis.otp.HotpInfo;
-import com.beemdevelopment.aegis.otp.OtpInfo;
-import com.beemdevelopment.aegis.otp.SteamInfo;
-import com.beemdevelopment.aegis.otp.TotpInfo;
-import com.beemdevelopment.aegis.otp.YandexInfo;
+import com.beemdevelopment.aegis.otp.*;
 import com.beemdevelopment.aegis.ui.glide.IconLoader;
 import com.beemdevelopment.aegis.vault.VaultEntry;
 import com.bumptech.glide.Glide;
@@ -40,6 +36,7 @@ public class EntryHolder extends RecyclerView.ViewHolder {
     private ImageView _profileDrawable;
     private VaultEntry _entry;
     private ImageView _buttonRefresh;
+    private ImageView _buttonYandex;
     private RelativeLayout _description;
     private ImageView _dragHandle;
     private ImageView _qr_auth;
@@ -73,10 +70,9 @@ public class EntryHolder extends RecyclerView.ViewHolder {
         _description = view.findViewById(R.id.description);
         _profileDrawable = view.findViewById(R.id.ivTextDrawable);
         _buttonRefresh = view.findViewById(R.id.buttonRefresh);
+        _buttonYandex = view.findViewById(R.id.buttonYandex);
         _selected = view.findViewById(R.id.ivSelected);
         _dragHandle = view.findViewById(R.id.drag_handle);
-        _qr_auth = view.findViewById(R.id.qr_auth);
-
         _selectedHandler = new Handler();
         _animationHandler = new Handler();
 
@@ -121,7 +117,7 @@ public class EntryHolder extends RecyclerView.ViewHolder {
         setShowProgress(showProgress);
 
         // only show the button if this entry is of type Yandex
-        _qr_auth.setVisibility(entry.getInfo() instanceof YandexInfo  ? View.VISIBLE : View.GONE);
+        _buttonYandex.setVisibility(entry.getInfo() instanceof YandexInfo ? View.VISIBLE : View.GONE);
 
         // only show the button if this entry is of type HotpInfo
         _buttonRefresh.setVisibility(entry.getInfo() instanceof HotpInfo ? View.VISIBLE : View.GONE);
@@ -169,6 +165,10 @@ public class EntryHolder extends RecyclerView.ViewHolder {
 
     public void setOnRefreshClickListener(View.OnClickListener listener) {
         _buttonRefresh.setOnClickListener(listener);
+    }
+
+    public void setOnYandexClickListener(View.OnClickListener listener) {
+        _buttonYandex.setOnClickListener(listener);
     }
 
     public void setShowDragHandle(boolean showDragHandle) {
