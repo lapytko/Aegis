@@ -30,6 +30,7 @@ import com.beemdevelopment.aegis.helpers.PermissionHelper;
 import com.beemdevelopment.aegis.helpers.QrCodeAnalyzer;
 import com.beemdevelopment.aegis.otp.GoogleAuthInfo;
 import com.beemdevelopment.aegis.otp.GoogleAuthInfoException;
+import com.beemdevelopment.aegis.otp.YandexAuthInfo;
 import com.beemdevelopment.aegis.ui.dialogs.Dialogs;
 import com.beemdevelopment.aegis.ui.fragments.preferences.BackupsPreferencesFragment;
 import com.beemdevelopment.aegis.ui.fragments.preferences.PreferencesFragment;
@@ -65,6 +66,7 @@ public class MainActivity extends AegisActivity implements EntryListView.Listene
     private static final int CODE_DECRYPT = 4;
     private static final int CODE_PREFERENCES = 5;
     private static final int CODE_SCAN_IMAGE = 6;
+    private static final int YANDEX_CODE_SCAN = 7;
 
     // permission request codes
     private static final int CODE_PERM_CAMERA = 0;
@@ -184,10 +186,19 @@ public class MainActivity extends AegisActivity implements EntryListView.Listene
                 break;
             case CODE_SCAN_IMAGE:
                 onScanImageResult(data);
+            case YANDEX_CODE_SCAN:
+                onYandexScanResult(data);
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    public void onYandexScanResult(Intent data) {
+        List<YandexAuthInfo> entries = (ArrayList<YandexAuthInfo>) data.getSerializableExtra("magic");
+        if (entries.size() == 1) {
+            Toast.makeText(this, entries.get(0).getOTP(), Toast.LENGTH_SHORT).show();
+            }
+        }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -202,6 +213,9 @@ public class MainActivity extends AegisActivity implements EntryListView.Listene
                 break;
             case CODE_PERM_READ_STORAGE:
                 startScanImageActivity();
+                break;
+            case YANDEX_CODE_SCAN:
+                startYandexScanActivity(getIntent());
                 break;
         }
 
@@ -358,6 +372,14 @@ public class MainActivity extends AegisActivity implements EntryListView.Listene
 
         Intent scannerActivity = new Intent(getApplicationContext(), ScannerActivity.class);
         startActivityForResult(scannerActivity, CODE_SCAN);
+    }
+
+    public void startYandexScanActivity(Intent yandexScannerActivity) {
+        if (!PermissionHelper.request(this, YANDEX_CODE_SCAN, Manifest.permission.CAMERA)) {
+            return;
+        }
+
+        startActivityForResult(yandexScannerActivity, YANDEX_CODE_SCAN);
     }
 
     private void startScanImageActivity() {

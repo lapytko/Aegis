@@ -39,7 +39,6 @@ public class EntryHolder extends RecyclerView.ViewHolder {
     private ImageView _buttonYandex;
     private RelativeLayout _description;
     private ImageView _dragHandle;
-    private ImageView _qr_auth;
   
     private final ImageView _selected;
     private final Handler _selectedHandler;
@@ -237,6 +236,16 @@ public class EntryHolder extends RecyclerView.ViewHolder {
         if (!_hidden && !_paused) {
             updateCode();
         }
+    }
+
+    public String getCode() {
+        OtpInfo info = _entry.getInfo();
+
+        String otp = info.getOtp();
+        if (!(info instanceof SteamInfo || info instanceof YandexInfo)) {
+            otp = formatCode(otp);
+        }
+        return otp;
     }
 
     private void updateCode() {

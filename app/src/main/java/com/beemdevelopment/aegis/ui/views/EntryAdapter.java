@@ -1,14 +1,14 @@
 package com.beemdevelopment.aegis.ui.views;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.beemdevelopment.aegis.SortCategory;
 import com.beemdevelopment.aegis.ViewMode;
 import com.beemdevelopment.aegis.helpers.ItemTouchHelperAdapter;
@@ -16,19 +16,14 @@ import com.beemdevelopment.aegis.otp.HotpInfo;
 import com.beemdevelopment.aegis.otp.OtpInfo;
 import com.beemdevelopment.aegis.otp.OtpInfoException;
 import com.beemdevelopment.aegis.otp.TotpInfo;
+import com.beemdevelopment.aegis.ui.MainActivity;
+import com.beemdevelopment.aegis.ui.YandexScannerActivity;
 import com.beemdevelopment.aegis.vault.VaultEntry;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryHolder> implements ItemTouchHelperAdapter {
+    private Context _context;
     private EntryListView _view;
     private List<VaultEntry> _entries;
     private List<VaultEntry> _shownEntries;
@@ -341,6 +336,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryHolder> implements I
     public EntryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(_viewMode.getLayoutId(), parent, false);
+
         EntryHolder holder = new EntryHolder(view);
         _view.setPreloadView(holder.getIconView());
         return holder;
@@ -451,6 +447,20 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryHolder> implements I
 
                 // finally, refresh the code in the UI
                 holder.refreshCode();
+            }
+        });
+
+        holder.setOnYandexClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    _context = v.getContext();
+                    Intent intent = new Intent(_context, YandexScannerActivity.class);
+                    holder.refreshCode();
+                    String pin =  holder.getCode();
+
+                    intent.putExtra("pin", pin);
+                    ((MainActivity)_context).startYandexScanActivity(intent);
             }
         });
 
